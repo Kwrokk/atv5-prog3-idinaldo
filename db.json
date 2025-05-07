@@ -1,0 +1,64 @@
+{
+  "categories": [
+    {
+      "id": "1",
+      "nome": "Consultation",
+      "iconName": "user-md"
+    },
+    {
+      "id": "2",
+      "nome": "Dentist",
+      "iconName": "tooth"
+    },
+    {
+      "id": "4",
+      "nome": "Cardiologist",
+      "iconName": "heartbeat"
+    },
+    {
+      "id": "5",
+      "nome": "Hospital",
+      "iconName": "hospital"
+    },
+    {
+      "id": "6",
+      "nome": "Emergency",
+      "iconName": "ambulance"
+    },
+    {
+      "id": "7",
+      "nome": "Laboratory",
+      "iconName": "flask"
+    }
+  ],
+  "doctors": [
+    {
+      "id": "1",
+      "nome": "dra. Nadla Gabriele",
+      "especialidade": "Consultant - Psychologist",
+      "review": "5.0",
+      "amountReviewed": "12k"
+    },
+    {
+      "id": "2",
+      "nome": "Idinaldo",
+      "especialidade": "Consultant - Internal Medicine",
+      "review": "4.9",
+      "amountReviewed": "10k"
+    },
+    {
+      "id": "3",
+      "nome": "Zeca Pagodinho",
+      "especialidade": "samba",
+      "review": "4.5",
+      "amountReviewed": "2k"
+    },
+    {
+      "id": "4",
+      "nome": "Juliana",
+      "especialidade": "Consultant - Cardiologist",
+      "review": "3.9",
+      "amountReviewed": "8k"
+    }
+  ]
+}
