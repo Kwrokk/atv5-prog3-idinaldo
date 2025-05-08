@@ -1,29 +1,16 @@
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  Alert,
-  ThemedView,
-} from "react-native";
-import {
-  Avatar,
-  Card,
-  Divider,
-  Header,
-  Icon,
-  SearchBar,
-} from "react-native-elements";
+import { StyleSheet, Text, View, TextInput, Button, Alert, ThemedView} from "react-native";
+import { Avatar, Card, Divider, Header, Icon, SearchBar } from "react-native-elements";
 import * as React from "react";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { ScrollView } from "react-native-web";
 
 function App({ navigation }) {
   const [doctors, setDoctors] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [user, setUser] = useState([]);
 
   useEffect(() => {
     axios
@@ -32,7 +19,7 @@ function App({ navigation }) {
         setDoctors(res.data);
       })
       .catch((err) => {
-        console.log("Erro ao buscar doutores: ", err);
+        alert("Erro ao buscar doutores: ", err);
       });
   }, []);
 
@@ -43,9 +30,21 @@ function App({ navigation }) {
         setCategories(res.data);
       })
       .catch((err) => {
-        console.log("Erro ao buscar categorias: ", err);
+        alert("Erro ao buscar categorias: ", err);
       });
   });
+
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/users/1")
+    .then((res) => {
+      setUser(res.data);
+    })
+    .catch((err) => {
+      alert("Erro ao logar usuário");
+    })
+  });
+
   return (
     <View style={styles.container}>
       {/* <Text>Então, só foi um samba triste</Text> */}
@@ -54,7 +53,7 @@ function App({ navigation }) {
           <Avatar
             size={60}
             rounded
-            icon={{ name: "user", type: "font-awesome" }}
+            source={{ uri: user.avatar_url}}
             containerStyle={{
               backgroundColor: "#e499e4",
               marginTop: "15px",
@@ -69,7 +68,7 @@ function App({ navigation }) {
               Welcome
             </Text>
             <Text style={{ color: "white" }}>
-              Nadla Gabriele/Idinaldo Oliveira
+              {user.nome}
             </Text>
           </Divider>
         </Divider>
@@ -86,63 +85,67 @@ function App({ navigation }) {
           }}
         />
       </Divider>
+      <ScrollView>
+        <View style={styles.splitTitles}>
+          <View>
+            <Text style={styles.h2Text}>Categories</Text>
+          </View>
 
-      <View style={styles.splitTitles}>
-        <View>
-          <Text style={styles.h2Text}>Categories</Text>
+          <View>
+            <Text style={styles.h2Text}>Show All</Text>
+          </View>
+        </View>
+
+          {/* CATEGORIAS */}
+        <View style={styles.menu}>
+          {categories.map((categories) => (
+            <Card containerStyle={styles.iconContainer}>
+              <FontAwesome5 name={categories.iconName} size={40} style={{paddingLeft: 15}}/>
+              <Card.Title style={styles.cardTitle}>{categories.nome}</Card.Title>
+            </Card>
+          ))}
         </View>
 
         <View>
-          <Text style={styles.h2Text}>Show All</Text>
+          <Text style={[styles.leftText, styles.h2Text]}>Top Doctors</Text>
         </View>
-      </View>
 
-      <View style={styles.menu}>
-        {categories.map((categories) => (
-          <Card containerStyle={styles.cardBox}>
-            <FontAwesome5 name={categories.iconName} size={40} />
-            <Card.Title style={styles.cardTitle}>{categories.nome}</Card.Title>
-          </Card>
-        ))}
-      </View>
-
-      <View>
-        <Text style={[styles.leftText, styles.h2Text]}>Top Doctors</Text>
-      </View>
-
-      <View style={styles.menu}>
-        {doctors.map((doctor) => (
-          <Card containerStyle={styles.doctorsCard}>
-            <View style={styles.flexContainer}>
-              <Avatar
-                size={60}
-                rounded
-                icon={{ name: "user", type: "font-awesome" }}
-                containerStyle={{
-                  backgroundColor: "#e499e4",
-                  marginTop: "15px",
-                  marginLeft: "10px",
-                }}
-              />
-              <View style={styles.messageContainer}>
-                <Card.Title style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
-                  {doctor.nome}
-                </Card.Title>
-                <Text>{doctor.especialidade}</Text>
-                <Text style={{ color: "gray" }}>
-                  <Icon
-                    name="star"
-                    type="font-awesome"
-                    color="yellow"
-                    size={18}
-                  />{" "}
-                  {doctor.review} ({doctor.amountReviewed} Reviews)
-                </Text>
+          
+          {/* DOUTORES */}
+        <View style={styles.menu}>
+          {doctors.map((doctor) => (
+            <Card containerStyle={styles.doctorsCard}>
+              <View style={styles.flexContainer}>
+                <Avatar
+                  size={60}
+                  rounded
+                  icon={{ name: "user", type: "font-awesome" }}
+                  containerStyle={{
+                    backgroundColor: "#e499e4",
+                    marginTop: "15px",
+                    marginLeft: "10px",
+                  }}
+                />
+                <View style={styles.messageContainer}>
+                  <Card.Title style={{ fontWeight: "bold", fontSize: "1.2rem" }}>
+                    {doctor.nome}
+                  </Card.Title>
+                  <Text>{doctor.especialidade}</Text>
+                  <Text style={{ color: "gray" }}>
+                    <Icon
+                      name="star"
+                      type="font-awesome"
+                      color="yellow"
+                      size={18}
+                    />{" "}
+                    {doctor.review} ({doctor.amountReviewed} Reviews)
+                  </Text>
+                </View>
               </View>
-            </View>
-          </Card>
-        ))}
-      </View>
+            </Card>
+          ))}
+        </View>
+      </ScrollView>
 
       <View
         style={{
@@ -189,6 +192,13 @@ const styles = StyleSheet.create({
     width: "100%",
     flexWrap: "wrap",
   },
+  iconContainer: {
+
+    width: "25%",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center"
+  },  
   container: {
     margin: 0,
     padding: 0,

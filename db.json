@@ -60,5 +60,13 @@
       "review": "3.9",
       "amountReviewed": "8k"
     }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "nome": "Idinaldo Oliveira",
+      "avatar_url": "https://avatar.iran.liara.run/public/35"
+    }
   ]
+
 }
